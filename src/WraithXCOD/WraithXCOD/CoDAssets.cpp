@@ -76,6 +76,7 @@
 // We need the export formats
 #include "SEAnimExport.h"
 #include "SEModelExport.h"
+#include "C2MExport.h"
 #include "MayaExport.h"
 #include "XMEExport.h"
 #include "XNALaraExport.h"
@@ -1511,6 +1512,8 @@ bool CoDAssets::ShouldExportModel(std::string ExportPath)
     // Check it
     if (SettingsManager::GetSetting("export_castmdl") == "true" && !FileSystems::FileExists(ExportPath + ".cast"))
         Result = true;
+    if (SettingsManager::GetSetting("export_c2m") == "true" && !FileSystems::FileExists(ExportPath + ".cast"))
+        Result = true;
     //// Check it
     //if (SettingsManager::GetSetting("export_fbx") == "true" && !FileSystems::FileExists(ExportPath + ".fbx"))
     //    Result = true;
@@ -1646,7 +1649,7 @@ ExportGameResult CoDAssets::ExportModelAsset(const CoDModel_t* Model, const std:
                     auto Result = CoDXModelTranslator::TranslateXModel(GenericModel, BiggestLodIndex);
 
                     // Apply lod name (_LOD0)
-                    Result->AssetName += "_LOD0";
+                    //Result->AssetName += "_LOD0";
 
                     // Check result and export
                     if (Result != nullptr)
@@ -2059,6 +2062,11 @@ void CoDAssets::ExportWraithModel(const std::unique_ptr<WraithModel>& Model, con
     {
         // Export a XNALara file
         XNALara::ExportXNA(*Model.get(), FileSystems::CombinePath(ExportPath, Model->AssetName + ".mesh.ascii"));
+    }
+    if (SettingsManager::GetSetting("export_c2m") == "true")
+    {
+        // Export a XMB file
+        C2M::ExportC2M(*Model.get(), FileSystems::CombinePath(ExportPath, Model->AssetName + ".c2model"));
     }
     // Check for GLTF format
     if (SettingsManager::GetSetting("export_gltf") == "true")

@@ -3,7 +3,7 @@
 #include <cstdint>
 #include <string>
 #include <vector>
-
+#include <functional>
 // We need the WraithAsset as a base
 #include "WraithAsset.h"
 
@@ -80,6 +80,7 @@ public:
     WraithVertex();
     ~WraithVertex();
     
+    WraithVertex(const WraithVertex& other);
     // -- Vertex data
 
     // The position of this vertex

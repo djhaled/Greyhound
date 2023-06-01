@@ -294,6 +294,9 @@
     <ClInclude Include="CastExport.h">
       <Filter>Header Files\Exporters</Filter>
     </ClInclude>
+    <ClInclude Include="C2MExport.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="stdafx.cpp">
@@ -523,6 +526,9 @@
     </ClCompile>
     <ClCompile Include="CastExport.cpp">
       <Filter>Source Files\Exporters</Filter>
+    </ClCompile>
+    <ClCompile Include="C2MExport.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

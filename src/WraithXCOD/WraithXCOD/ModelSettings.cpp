@@ -23,7 +23,7 @@ BEGIN_MESSAGE_MAP(ModelSettings, WraithWindow)
     ON_COMMAND(IDC_EXPORTOBJ, OnExportOBJ)
     ON_COMMAND(IDC_EXPORTXNA, OnExportXNA)
     ON_COMMAND(IDC_EXPORTSMD, OnExportSMD)
-    ON_COMMAND(IDC_EXPORTXMB, OnExportXMB)
+    ON_COMMAND(IDC_EXPORTC2M, OnExportC2M)
     ON_COMMAND(IDC_EXPORTXME, OnExportXME)
     ON_COMMAND(IDC_EXPORTGLTF, OnExportGLTF)
     ON_COMMAND(IDC_EXPORTCASTMDL, OnExportCast)
@@ -73,7 +73,7 @@ void ModelSettings::OnBeforeLoad()
     ((CButton*)GetDlgItem(IDC_EXPORTOBJ))->SetCheck(SettingsManager::GetSetting("export_obj", "false") == "true");
     ((CButton*)GetDlgItem(IDC_EXPORTXNA))->SetCheck(SettingsManager::GetSetting("export_xna", "false") == "true");
     ((CButton*)GetDlgItem(IDC_EXPORTSMD))->SetCheck(SettingsManager::GetSetting("export_smd", "false") == "true");
-    ((CButton*)GetDlgItem(IDC_EXPORTXMB))->SetCheck(SettingsManager::GetSetting("export_xmbin", "false") == "true");
+    ((CButton*)GetDlgItem(IDC_EXPORTC2M))->SetCheck(SettingsManager::GetSetting("export_c2m", "false") == "true");
     ((CButton*)GetDlgItem(IDC_EXPORTXME))->SetCheck(SettingsManager::GetSetting("export_xmexport", "false") == "true");
     ((CButton*)GetDlgItem(IDC_EXPORTGLTF))->SetCheck(SettingsManager::GetSetting("export_gltf", "false") == "true");
     ((CButton*)GetDlgItem(IDC_EXPORTCASTMDL))->SetCheck(SettingsManager::GetSetting("export_castmdl", "false") == "true");
@@ -147,9 +147,15 @@ void ModelSettings::OnExportSMD()
 void ModelSettings::OnExportXMB()
 {
     // Whether or not we are checked
-    bool CheckboxChecked = ((((CButton*)GetDlgItem(IDC_EXPORTXMB))->GetState() & BST_CHECKED) == BST_CHECKED);
     // Set it
-    SettingsManager::SetSetting("export_xmbin", (CheckboxChecked) ? "true" : "false");
+}
+
+void ModelSettings::OnExportC2M()
+{
+    // Whether or not we are checked
+    bool CheckboxChecked = ((((CButton*)GetDlgItem(IDC_EXPORTC2M))->GetState() & BST_CHECKED) == BST_CHECKED);
+    // Set it
+    SettingsManager::SetSetting("export_c2m", (CheckboxChecked) ? "true" : "false");
 }
 
 void ModelSettings::OnExportXME()

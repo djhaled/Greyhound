@@ -22,6 +22,7 @@
     <UseDebugLibraries>true</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
+    <VCToolsVersion>14.35.32215</VCToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>StaticLibrary</ConfigurationType>
@@ -48,8 +49,9 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_CRT_NO_VA_START_VALIDATION;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>..\ExternalDeps\Flac1.3.2\include;..\..\External\DirectXTex\DirectXTex\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\MSVC\14.35.32215\atlmfc\include;..\ExternalDeps\Flac1.3.2\include;..\..\External\DirectXTex\DirectXTex\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp14</LanguageStandard>
+      <IgnoreStandardIncludePath>false</IgnoreStandardIncludePath>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -88,6 +90,7 @@
     <ClInclude Include="Autherization.h" />
     <ClInclude Include="BinaryReader.h" />
     <ClInclude Include="BinaryWriter.h" />
+    <ClInclude Include="C2MExport.h" />
     <ClInclude Include="CastExport.h" />
     <ClInclude Include="CommandLineManager.h" />
     <ClInclude Include="Compression.h" />
@@ -174,6 +177,7 @@
     <ClCompile Include="Autherization.cpp" />
     <ClCompile Include="BinaryReader.cpp" />
     <ClCompile Include="BinaryWriter.cpp" />
+    <ClCompile Include="C2MExport.cpp" />
     <ClCompile Include="CastExport.cpp" />
     <ClCompile Include="CommandLineManager.cpp" />
     <ClCompile Include="Compression.cpp" />

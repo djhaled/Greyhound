@@ -37,6 +37,7 @@ private:
     void OnExportXNA();
     void OnExportSMD();
     void OnExportXMB();
+    void OnExportC2M();
     void OnExportXME();
     void OnExportGLTF();
     void OnExportCast();

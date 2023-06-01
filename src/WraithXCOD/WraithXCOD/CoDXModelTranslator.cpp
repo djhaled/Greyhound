@@ -316,6 +316,7 @@ std::unique_ptr<WraithModel> CoDXModelTranslator::TranslateXModel(const std::uni
         ModelResult->PrepareSubmeshes((uint32_t)LodReference.Submeshes.size());
 
         // Iterate over submeshes
+        int surf_vertCounter = 0;
         for (auto& Submesh : LodReference.Submeshes)
         {
             // Create and grab a new submesh
@@ -439,8 +440,10 @@ std::unique_ptr<WraithModel> CoDXModelTranslator::TranslateXModel(const std::uni
                     // Read data
                     auto FaceIndicies = FaceData.Read<GfxFaceBuffer>();
                     // Add the face
-                    Mesh.AddFace(FaceIndicies.Index1, FaceIndicies.Index2, FaceIndicies.Index3);
+                    //Mesh.AddFace(FaceIndicies.Index1, FaceIndicies.Index2, FaceIndicies.Index3);
+                    Mesh.AddFace(FaceIndicies.Index1 + surf_vertCounter, FaceIndicies.Index2 + surf_vertCounter, FaceIndicies.Index3 + surf_vertCounter);
                 }
+                surf_vertCounter += Submesh.VertexCount;
             }
             else
             {
@@ -491,7 +494,8 @@ std::unique_ptr<WraithModel> CoDXModelTranslator::TranslateXModel(const std::uni
                     // Read data
                     auto FaceIndicies = FaceData.Read<GfxFaceBuffer>();
                     // Add the face
-                    Mesh.AddFace(FaceIndicies.Index1, FaceIndicies.Index2, FaceIndicies.Index3);
+                    Mesh.AddFace(FaceIndicies.Index1 + surf_vertCounter, FaceIndicies.Index2 + surf_vertCounter, FaceIndicies.Index3 + surf_vertCounter);
+                    surf_vertCounter += Submesh.VertexCount;
                 }
             }
         }

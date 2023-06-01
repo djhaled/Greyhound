@@ -11,7 +11,8 @@
 #pragma comment(lib, "Gdi32.lib")
 #pragma comment(lib, "Gdiplus.lib")
 // MFC
-#include <afxwin.h>
+
+#include "afxwin.h"
 #include <afxdisp.h>
 #include <afxglobals.h>
 

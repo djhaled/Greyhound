@@ -73,6 +73,16 @@ WraithVertex::~WraithVertex()
     // Clean up if need be
 }
 
+WraithVertex::WraithVertex(const WraithVertex& other)
+{
+    Position = other.Position;
+    BlendShapeDeltas = other.BlendShapeDeltas;
+    Weights = other.Weights;
+    Normal = other.Normal;
+    UVLayers = other.UVLayers;
+    std::copy(std::begin(other.Color), std::end(other.Color), std::begin(Color));
+}
+
 uint32_t WraithVertex::WeightCount() const
 {
     // Return it

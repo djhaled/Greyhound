@@ -219,6 +219,7 @@ public:
     // A list of materials for this model
     std::vector<WraithMaterial> Materials;
 
+    std::string GameName ;
     // -- Model properties
 
     // Gets the number of bones in this model

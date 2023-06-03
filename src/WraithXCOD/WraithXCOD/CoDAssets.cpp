@@ -108,6 +108,30 @@ SupportedGameFlags CoDAssets::GameFlags = SupportedGameFlags::None;
 // Set the default verification
 bool CoDAssets::VerifiedHashes = false;
 
+std::unordered_map<SupportedGames, std::string> CoDAssets::gameNames = {
+    {SupportedGames::None, "None"},
+    {SupportedGames::WorldAtWar, "world_at_war"},
+    {SupportedGames::BlackOps, "black_ops"},
+    {SupportedGames::BlackOps2, "black_ops_2"},
+    {SupportedGames::BlackOps3, "black_ops_3"},
+    {SupportedGames::BlackOps4, "black_ops_4"},
+    {SupportedGames::BlackOpsCW, "black_ops_cold_war"},
+    {SupportedGames::ModernWarfare, "modern_warfare"},
+    {SupportedGames::ModernWarfare2, "modern_warfare_2"},
+    {SupportedGames::ModernWarfare3, "modern_warfare_3"},
+    {SupportedGames::ModernWarfare4, "modern_warfare_4"},
+    {SupportedGames::ModernWarfare5, "modern_warfare_5"},
+    {SupportedGames::QuantumSolace, "quantum_solace"},
+    {SupportedGames::ModernWarfareRemastered, "modern_warfare_remastered"},
+    {SupportedGames::ModernWarfare2Remastered, "modern_warfare_2_remastered"},
+    {SupportedGames::Ghosts, "ghosts"},
+    {SupportedGames::InfiniteWarfare, "infinite_warfare"},
+    {SupportedGames::AdvancedWarfare, "advanced_warfare"},
+    {SupportedGames::WorldWar2, "world_war_2"},
+    {SupportedGames::Vanguard, "vanguard"},
+    {SupportedGames::Parasyte, "parasyte"},
+};
+
 // Set game offsets
 std::vector<uint64_t> CoDAssets::GameOffsetInfos = std::vector<uint64_t>();
 // Set game sizes

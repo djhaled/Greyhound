@@ -22,6 +22,7 @@
 #include "Parasyte.h"
 
 // A list of supported Call of Duty games, or none for nothing loaded
+
 enum class SupportedGames
 {
     None,
@@ -46,6 +47,7 @@ enum class SupportedGames
     Vanguard,
     Parasyte,
 };
+
 
 // A list of supported game flags for Call of Duty
 enum class SupportedGameFlags
@@ -138,6 +140,9 @@ public:
     static SupportedGameFlags GameFlags;
     // The load game flags, if any
     static bool VerifiedHashes;
+
+
+    static std::unordered_map<SupportedGames, std::string> gameNames;
 
     // The game's loaded assets
     static std::unique_ptr<AssetPool> GameAssets;

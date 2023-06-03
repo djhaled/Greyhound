@@ -243,8 +243,9 @@ std::unique_ptr<WraithModel> CoDXModelTranslator::TranslateXModel(const std::uni
     if (JustBones) { return ModelResult; }
 
     // Store game index (For faster lookup during conversion)
-    auto CurrentGame = CoDAssets::GameID;
-
+    SupportedGames CurrentGame = CoDAssets::GameID;
+    ModelResult->GameName = CoDAssets::gameNames[CurrentGame];
+    //ModelResult->GameName = CurrentGame;
     // Grab reference to the lod we want to translate
     auto& LodReference = Model->ModelLods[LodIndex];
 

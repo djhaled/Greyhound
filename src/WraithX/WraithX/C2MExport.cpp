@@ -11,9 +11,9 @@ void C2M::ExportC2M(const WraithModel& Model, const std::string& FileName, bool 
     BinaryWriter Writer;
     // Open the file
     Writer.Create(FileName);
-
     bool bIsSkeletalMesh = (Model.Bones.size() > 1);
     Writer.Write<byte>(bIsSkeletalMesh);
+    Writer.WriteNullTerminatedString(Model.GameName);
     Writer.WriteNullTerminatedString(Model.AssetName);
     Writer.Write<uint32_t>(Model.VertexCount());
     Writer.Write<uint32_t>(Model.SubmeshCount());
@@ -55,6 +55,16 @@ void C2M::ExportC2M(const WraithModel& Model, const std::string& FileName, bool 
             }
         }
     }
+    Writer.Write<uint32_t>(Model.MaterialCount());
+    for (const auto Material : Model.Materials)
+    {
+        // make it more advanced
+        Writer.WriteNullTerminatedString(Material.MaterialName);
+        Writer.WriteNullTerminatedString(Material.DiffuseMapName);
+        Writer.WriteNullTerminatedString(Material.NormalMapName);
+        Writer.WriteNullTerminatedString(Material.SpecularMapName);
+    }
+    // Bones / Skeletal stuff should be down here.
 }
 
 

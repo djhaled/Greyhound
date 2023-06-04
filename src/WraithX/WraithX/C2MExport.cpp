@@ -18,13 +18,22 @@ void C2M::ExportC2M(const WraithModel& Model, const std::string& FileName, bool 
     Writer.Write<uint32_t>(Model.VertexCount());
     Writer.Write<uint32_t>(Model.SubmeshCount());
     Writer.Write<uint32_t>(Model.FaceCount());
-
     for (size_t i = 0; i < Model.Submeshes.size(); i++)
     {
         const auto& submesh = Model.Submeshes[i];
         Writer.WriteNullTerminatedString("surfC2Model_" + std::to_string(i));  // Surface name based on array number
         Writer.Write<uint8_t>(submesh.Verticies[0].UVLayers.size());
         Writer.Write<uint8_t>(submesh.MaterialIndicies.size());
+        uint8_t MaxSkinInfluenceBuffer = 0;
+        for (auto& Vertex : submesh.Verticies)
+        {
+            if (Vertex.WeightCount() > MaxSkinInfluenceBuffer)
+                MaxSkinInfluenceBuffer = (uint8_t)Vertex.WeightCount();
+        }
+
+        uint32_t VertexCountBuffer = submesh.VertexCount();
+        Writer.Write<uint32_t>(MaxSkinInfluenceBuffer);
+        Writer.Write<uint32_t>(VertexCountBuffer);
 
         for (const auto& mti : submesh.MaterialIndicies)
         {
@@ -35,13 +44,34 @@ void C2M::ExportC2M(const WraithModel& Model, const std::string& FileName, bool 
 
         for (const auto& face : submesh.Faces)
         {
-            Writer.Write<uint32_t>(face.Index3);
-            Writer.Write<uint32_t>(face.Index2);
-            Writer.Write<uint32_t>(face.Index1);
+            //Writer.Write<uint32_t>(face.Index3);
+            //Writer.Write<uint32_t>(face.Index2);
+            //Writer.Write<uint32_t>(face.Index1);
+            if (VertexCountBuffer <= 0xFF)
+            {
+                // Write as byte
+                Writer.Write<uint8_t>((uint8_t)face.Index3);
+                Writer.Write<uint8_t>((uint8_t)face.Index2);
+                Writer.Write<uint8_t>((uint8_t)face.Index1);
+            }
+            else if (VertexCountBuffer <= 0xFFFF)
+            {
+                // Write as short
+                Writer.Write<uint16_t>((uint16_t)face.Index3);
+                Writer.Write<uint16_t>((uint16_t)face.Index2);
+                Writer.Write<uint16_t>((uint16_t)face.Index1);
+            }
+            else
+            {
+                // Write as int
+                Writer.Write<uint32_t>((uint32_t)face.Index3);
+                Writer.Write<uint32_t>((uint32_t)face.Index2);
+                Writer.Write<uint32_t>((uint32_t)face.Index1);
+            }
         }
-        Writer.Write<uint32_t>(submesh.VertexCount());
-        for (const auto& vertex : submesh.Verticies)
+        for (size_t vsd = 0; vsd < submesh.Verticies.size(); vsd++)
         {
+            auto& vertex = submesh.Verticies[vsd];
             // FUTURE Writer.Write<WraithVertex>(vertex);
             Writer.Write<Vector3>(vertex.Position);
             Writer.Write<Vector3>(vertex.Normal);
@@ -52,6 +82,25 @@ void C2M::ExportC2M(const WraithModel& Model, const std::string& FileName, bool 
             for (const auto& color : vertex.Color)
             {
                 Writer.Write<byte>(color);
+            }
+            // Write weight values
+            for (uint32_t i = 0; i < MaxSkinInfluenceBuffer; i++)
+            {
+                // Write IDs
+                Writer.Write<uint32_t>((uint32_t)vsd);
+                auto WeightID = (i < vertex.WeightCount()) ? vertex.Weights[i].BoneIndex : 0;
+                auto WeightValue = (i < vertex.WeightCount()) ? vertex.Weights[i].Weight : 0.0f;
+                Writer.Write<uint32_t>((uint32_t)WeightID);
+                // Write ID based on count
+                //if (Model.BoneCount() <= 0xFF)
+                //    Writer.Write<uint8_t>((uint8_t)WeightID);
+                //else if (Model.BoneCount() <= 0xFFFF)
+                //    Writer.Write<uint16_t>((uint16_t)WeightID);
+                //else
+                //    Writer.Write<uint32_t>((uint32_t)WeightID);
+
+                // Write value
+                Writer.Write<float>(WeightValue);
             }
         }
     }
@@ -64,7 +113,31 @@ void C2M::ExportC2M(const WraithModel& Model, const std::string& FileName, bool 
         Writer.WriteNullTerminatedString(Material.NormalMapName);
         Writer.WriteNullTerminatedString(Material.SpecularMapName);
     }
+
     // Bones / Skeletal stuff should be down here.
+
+    // Write the bone info
+    Writer.Write<uint32_t>(Model.BoneCount());
+    for (auto& Bone : Model.Bones)
+    {
+        Writer.WriteNullTerminatedString(Bone.TagName);
+        // Write bone flags, 0 for now
+        Writer.Write<uint8_t>(0x0);
+
+        // Write bone parent
+        Writer.Write<int32_t>(Bone.BoneParent);
+
+        // Write global matricies
+        Writer.Write<Vector3>(Bone.GlobalPosition);
+        Writer.Write<Quaternion>(Bone.GlobalRotation);
+        // Write local matricies
+        Writer.Write<Vector3>(Bone.LocalPosition);
+        Writer.Write<Quaternion>(Bone.LocalRotation);
+
+        // Write scale, if support
+        if (SupportsScale)
+            Writer.Write<Vector3>(Bone.BoneScale);
+    }
 }
 
 

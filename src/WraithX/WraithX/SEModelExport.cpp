@@ -154,6 +154,7 @@ void SEModel::ExportSEModel(const WraithModel& Model, const std::string& FileNam
 
     // Iterate and produce meshes
     for (auto& Mesh : Model.Submeshes)
+    // for (size_t i = 0; i < 1; i++)
     {
         // Write mesh flags, 0 for now
         Writer.Write<uint8_t>(0x0);

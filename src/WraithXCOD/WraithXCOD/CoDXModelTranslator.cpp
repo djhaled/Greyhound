@@ -441,7 +441,6 @@ std::unique_ptr<WraithModel> CoDXModelTranslator::TranslateXModel(const std::uni
                     // Read data
                     auto FaceIndicies = FaceData.Read<GfxFaceBuffer>();
                     // Add the face
-                    //Mesh.AddFace(FaceIndicies.Index1, FaceIndicies.Index2, FaceIndicies.Index3);
                     Mesh.AddFace(FaceIndicies.Index1 + surf_vertCounter, FaceIndicies.Index2 + surf_vertCounter, FaceIndicies.Index3 + surf_vertCounter);
                 }
                 surf_vertCounter += Submesh.VertexCount;

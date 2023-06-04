@@ -112,6 +112,8 @@ public:
     uint32_t CosmeticBoneCount;
     // The lod count
     uint16_t LodCount;
+    uint32_t VerticeCount;
+    uint16_t SurfaceCount;
 
     // Compares the asset to this one, if compare details is enabled, they are used if the assets are the same type.
     bool Compare(const CoDAsset_t* candidate, const AssetCompareMethod compareMethod) const;

@@ -1369,7 +1369,7 @@ void GameBlackOpsCW::LoadXModel(const XModelLod_t& ModelLOD, const std::unique_p
                 }
             }
         }
-
+        int surf_vertCounter = 0;
         // Iterate over submeshes
         for (auto& Submesh : ModelLOD.Submeshes)
         {
@@ -1479,8 +1479,10 @@ void GameBlackOpsCW::LoadXModel(const XModelLod_t& ModelLOD, const std::unique_p
                 auto Face = MeshReader.Read<GfxStreamFace>();
 
                 // Add the face
-                Mesh.AddFace(Face.Index1, Face.Index2, Face.Index3);
+                //Mesh.AddFace(Face.Index1, Face.Index2, Face.Index3);
+                Mesh.AddFace(Face.Index1 + surf_vertCounter, Face.Index2 + surf_vertCounter, Face.Index3 + surf_vertCounter);
             }
+            surf_vertCounter += Submesh.VertexCount;
         }
     }
 }

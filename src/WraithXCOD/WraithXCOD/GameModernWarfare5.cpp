@@ -1027,6 +1027,7 @@ void GameModernWarfare5::LoadXModel(const std::unique_ptr<XModel_t>& Model, cons
         MemoryReader FaceIndiciesReader;
 
         // Iterate over submeshes
+        int surf_vertCounter = 0;
         for (auto& Submesh : ModelLOD.Submeshes)
         {
             // Create and grab a new submesh
@@ -1134,8 +1135,10 @@ void GameModernWarfare5::LoadXModel(const std::unique_ptr<XModel_t>& Model, cons
                 auto Face = FaceIndiciesReader.Read<MW5GfxStreamFace>();
 
                 // Add the face
-                Mesh.AddFace(Face.Index1, Face.Index2, Face.Index3);
+                //Mesh.AddFace(Face.Index1, Face.Index2, Face.Index3);
+                Mesh.AddFace(Face.Index1 + surf_vertCounter, Face.Index2 + surf_vertCounter, Face.Index3 + surf_vertCounter);
             }
+            surf_vertCounter += Submesh.VertexCount;
         }
     }
 }

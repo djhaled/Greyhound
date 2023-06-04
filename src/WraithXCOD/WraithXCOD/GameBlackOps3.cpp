@@ -786,6 +786,7 @@ void GameBlackOps3::LoadXModel(const XModelLod_t& ModelLOD, const std::unique_pt
         ResultModel->PrepareSubmeshes((uint32_t)ModelLOD.Submeshes.size());
 
         // Iterate over submeshes
+        int surf_vertCounter = 0;
         for (auto& Submesh : ModelLOD.Submeshes)
         {
             // Create and grab a new submesh
@@ -915,8 +916,10 @@ void GameBlackOps3::LoadXModel(const XModelLod_t& ModelLOD, const std::unique_pt
                 auto Face = MeshReader.Read<GfxStreamFace>();
 
                 // Add the face
-                Mesh.AddFace(Face.Index1, Face.Index2, Face.Index3);
+                Mesh.AddFace(Face.Index1 + surf_vertCounter, Face.Index2 + surf_vertCounter, Face.Index3 + surf_vertCounter);
+                //Mesh.AddFace(Face.Index1, Face.Index2, Face.Index3);
             }
+            surf_vertCounter += Submesh.VertexCount;
         }
 
         // Prepare to generate stream bones if we had a conflict

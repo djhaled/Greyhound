@@ -38,6 +38,7 @@ enum class SEAnimDataPresenceFlags : uint8_t
 
 void SEAnim::ExportSEAnim(const WraithAnim& Animation, const std::string& FileName)
 {
+
     // Create a new writer
     auto Writer = BinaryWriter();
     // Open the file

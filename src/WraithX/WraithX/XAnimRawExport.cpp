@@ -343,7 +343,6 @@ void XAnimRaw::ExportXAnimRaw(const WraithAnim& Animation, const std::string& Fi
             auto& BoneTranslations = Animation.AnimationPositionKeys.at(Bone);
             // Write count
             Writer.Write<uint16_t>((uint16_t)BoneTranslations.size());
-
             XAnimProduceTranslations(Writer, FrameSize, LoopedFrameCount, BoneTranslations);
         }
         else

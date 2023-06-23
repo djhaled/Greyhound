@@ -1,9 +1,17 @@
 #include "stdafx.h"
 #include "C2MExport.h"
+
+#include "SEModelExport.h"
 #include <functional>
 
 // We need the binarywriter class
 #include "BinaryWriter.h"
+
+// Define PI if it's not already defined
+#ifndef PI
+#define PI 3.14159265359
+#endif
+
 void C2M::ExportC2M(const WraithModel& Model, const std::string& FileName, bool SupportsScale)
 {
     WraithSubmesh Mesh;
@@ -71,8 +79,10 @@ void C2M::ExportC2M(const WraithModel& Model, const std::string& FileName, bool 
         }
         for (size_t vsd = 0; vsd < submesh.Verticies.size(); vsd++)
         {
-            auto& vertex = submesh.Verticies[vsd];
+            auto vertex = submesh.Verticies[vsd];
             // FUTURE Writer.Write<WraithVertex>(vertex);
+            vertex.Position.Y *= -1.0;
+            vertex.Normal.Y *= -1.0;
             Writer.Write<Vector3>(vertex.Position);
             Writer.Write<Vector3>(vertex.Normal);
             for (const auto& uvz : vertex.UVLayers)
@@ -91,15 +101,6 @@ void C2M::ExportC2M(const WraithModel& Model, const std::string& FileName, bool 
                 auto WeightID = (i < vertex.WeightCount()) ? vertex.Weights[i].BoneIndex : 0;
                 auto WeightValue = (i < vertex.WeightCount()) ? vertex.Weights[i].Weight : 0.0f;
                 Writer.Write<uint32_t>((uint32_t)WeightID);
-                // Write ID based on count
-                //if (Model.BoneCount() <= 0xFF)
-                //    Writer.Write<uint8_t>((uint8_t)WeightID);
-                //else if (Model.BoneCount() <= 0xFFFF)
-                //    Writer.Write<uint16_t>((uint16_t)WeightID);
-                //else
-                //    Writer.Write<uint32_t>((uint32_t)WeightID);
-
-                // Write value
                 Writer.Write<float>(WeightValue);
             }
         }
@@ -118,7 +119,7 @@ void C2M::ExportC2M(const WraithModel& Model, const std::string& FileName, bool 
 
     // Write the bone info
     Writer.Write<uint32_t>(Model.BoneCount());
-    for (auto& Bone : Model.Bones)
+    for (auto Bone : Model.Bones)
     {
         Writer.WriteNullTerminatedString(Bone.TagName);
         // Write bone flags, 0 for now
@@ -127,12 +128,22 @@ void C2M::ExportC2M(const WraithModel& Model, const std::string& FileName, bool 
         // Write bone parent
         Writer.Write<int32_t>(Bone.BoneParent);
 
-        // Write global matricies
+        Bone.GlobalPosition.Y *= -1.0f;
+        Bone.LocalPosition.Y *= -1.0f;
+        Vector3 FixGlobal = Bone.GlobalRotation.ToEulerAngles();
+        FixGlobal.Z *= -1.0f;
+        FixGlobal.Y *= -1.0f;
+        Vector3 FixLocal = Bone.LocalRotation.ToEulerAngles();
+        FixLocal.Z *= -1.0f;
+        FixLocal.Y *= -1.0f;
+
+        // Write global matrices
         Writer.Write<Vector3>(Bone.GlobalPosition);
-        Writer.Write<Quaternion>(Bone.GlobalRotation);
-        // Write local matricies
+        Writer.Write<Vector3>(Vector3(FixGlobal.Y, FixGlobal.Z, FixGlobal.X));
+        // Write local matrices
         Writer.Write<Vector3>(Bone.LocalPosition);
-        Writer.Write<Quaternion>(Bone.LocalRotation);
+        Writer.Write<Vector3>(Vector3(FixLocal.Y, FixLocal.Z, FixLocal.X));
+
 
         // Write scale, if support
         if (SupportsScale)
@@ -142,17 +153,6 @@ void C2M::ExportC2M(const WraithModel& Model, const std::string& FileName, bool 
 
 
 
-uint32_t C2M::GetVertexIndex(const std::vector<WraithVertex>& vertices, const WraithVertex& vertex)
-{
-    auto it = std::find_if(vertices.begin(), vertices.end(), [&](const WraithVertex& v) {
-        return v.Position == vertex.Position && v.Normal == vertex.Normal && v.UVLayers == vertex.UVLayers;
-        });
 
-    if (it != vertices.end()) {
-        return static_cast<uint32_t>(std::distance(vertices.begin(), it));
-    }
-
-    return 0;  // Return 0 as the default index if the vertex is not found
-}
 
 
